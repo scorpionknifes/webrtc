@@ -271,6 +271,11 @@ func (pc *PeerConnection) onNegotiationNeeded() {
 }
 
 func (pc *PeerConnection) negotiationNeededOp() {
+	// Don't run NegotiatedNeeded checks if OnNegotiationNeeded is not set
+	if handler := pc.onNegotiationNeededHandler.Load(); handler == nil {
+		return
+	}
+
 	// https://www.w3.org/TR/webrtc/#updating-the-negotiation-needed-flag
 	// Step 2.1
 	if pc.isClosed.get() {
@@ -354,7 +359,8 @@ func (pc *PeerConnection) checkNegotiationNeeded() bool { //nolint:gocognit
 			// Step 5.3.1
 			if t.Direction() == RTPTransceiverDirectionSendrecv || t.Direction() == RTPTransceiverDirectionSendonly {
 				descMsid, okMsid := m.Attribute(sdp.AttrKeyMsid)
-				if !okMsid || descMsid != t.Sender().Track().StreamID() {
+				track := t.Sender().Track()
+				if !okMsid || descMsid != track.StreamID()+" "+track.ID() {
 					return true
 				}
 			}
