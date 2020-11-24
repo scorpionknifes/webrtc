@@ -345,6 +345,11 @@ func addTransceiverSDP(d *sdp.SessionDescription, isPlanB, shouldAddCandidates b
 				codecs = t.Receiver().codecs
 			}
 		case RTPTransceiverDirectionInactive:
+			if t.Sender() != nil {
+				params := t.Sender().GetParameters()
+				extHeaders = params.HeaderExtensions
+				codecs = params.Codecs
+			}
 		}
 		for _, codec := range codecs {
 			name := strings.TrimPrefix(codec.MimeType, "audio/")

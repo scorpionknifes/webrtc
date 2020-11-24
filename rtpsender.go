@@ -31,6 +31,7 @@ type RTPSender struct {
 	// a transceiver sender since we can just check the
 	// transceiver negotiation status
 	negotiated bool
+	stopped    bool
 
 	// A reference to the associated api object
 	api *API
@@ -179,6 +180,7 @@ func (r *RTPSender) Stop() error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
+	r.stopped = true
 	select {
 	case <-r.stopCalled:
 		return nil

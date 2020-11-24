@@ -1527,7 +1527,7 @@ func (pc *PeerConnection) AddTrack(track TrackLocal) (*RTPSender, error) {
 
 	var transceiver *RTPTransceiver
 	for _, t := range pc.GetTransceivers() {
-		if !t.stopped && t.kind == track.Kind() && t.Sender() == nil {
+		if !t.stopped && t.kind == track.Kind() && (t.Sender() == nil || t.Sender().stopped) {
 			transceiver = t
 			break
 		}
@@ -1581,8 +1581,11 @@ func (pc *PeerConnection) RemoveTrack(sender *RTPSender) error {
 		return err
 	}
 
-	if err := transceiver.setSendingTrack(nil); err != nil {
-		return err
+	if transceiver.Direction() == RTPTransceiverDirectionSendrecv {
+		transceiver.setDirection(RTPTransceiverDirectionRecvonly)
+	}
+	if transceiver.Direction() == RTPTransceiverDirectionSendonly {
+		transceiver.setDirection(RTPTransceiverDirectionInactive)
 	}
 
 	pc.onNegotiationNeeded()
