@@ -1334,7 +1334,7 @@ func (pc *PeerConnection) handleUndeclaredSSRC(rtpStream io.Reader, ssrc SSRC) e
 			incoming.kind = RTPCodecTypeAudio
 		}
 
-		t, err := pc.AddTransceiverFromKind(incoming.kind, RtpTransceiverInit{
+		t, err := pc.AddTransceiverFromKind(incoming.kind, RTPTransceiverInit{
 			Direction: RTPTransceiverDirectionSendrecv,
 		})
 		if err != nil {
@@ -1342,16 +1342,6 @@ func (pc *PeerConnection) handleUndeclaredSSRC(rtpStream io.Reader, ssrc SSRC) e
 		}
 		pc.startReceiver(incoming, t.Receiver())
 		return nil
-	}
-
-	midExtensionID, audioSupported, videoSupported := pc.api.mediaEngine.GetHeaderExtensionID(RTPHeaderExtensionCapability{sdp.SDESMidURI})
-	if !audioSupported && !videoSupported {
-		return errPeerConnSimulcastMidRTPExtensionRequired
-	}
-
-	streamIDExtensionID, audioSupported, videoSupported := pc.api.mediaEngine.GetHeaderExtensionID(RTPHeaderExtensionCapability{sdp.SDESRTPStreamIDURI})
-	if !audioSupported && !videoSupported {
-		return errPeerConnSimulcastStreamIDRTPExtensionRequired
 	}
 
 	b := make([]byte, receiveMTU)
@@ -1362,30 +1352,57 @@ func (pc *PeerConnection) handleUndeclaredSSRC(rtpStream io.Reader, ssrc SSRC) e
 			return err
 		}
 
-		maybeMid, maybeRid, payloadType, err := handleUnknownRTPPacket(b[:i], uint8(midExtensionID), uint8(streamIDExtensionID))
-		if err != nil {
-			return err
-		}
-
-		if maybeMid != "" {
-			mid = maybeMid
-		}
-		if maybeRid != "" {
-			rid = maybeRid
-		}
-
-		if mid == "" || rid == "" {
-			continue
-		}
-
-		codec, err := pc.api.mediaEngine.getCodecByPayload(payloadType)
-		if err != nil {
-			return err
-		}
-
+		var midExtensionID uint8
+		var streamIDExtensionID uint8
 		for _, t := range pc.GetTransceivers() {
-			if t.Mid() != mid || t.Receiver() == nil {
+			params := t.Receiver().GetParameters()
+			for _, ext := range params.HeaderExtensions {
+				if ext.URI == sdp.SDESMidURI {
+					midExtensionID = ext.ID
+				}
+				if ext.URI == sdp.SDESRTPStreamIDURI {
+					streamIDExtensionID = ext.ID
+				}
+			}
+
+			if midExtensionID == 0 || streamIDExtensionID == 0 {
+				midExtensionID = 0
+				streamIDExtensionID = 0
 				continue
+			}
+
+			maybeMid, maybeRid, payloadType, err := handleUnknownRTPPacket(b[:i], midExtensionID, streamIDExtensionID)
+			if err != nil {
+				return err
+			}
+
+			if maybeMid != "" {
+				mid = maybeMid
+			}
+			if maybeRid != "" {
+				rid = maybeRid
+			}
+
+			if mid == "" || rid == "" {
+				midExtensionID = 0
+				streamIDExtensionID = 0
+				continue
+			}
+			if t.Mid() != mid || t.Receiver() == nil {
+				midExtensionID = 0
+				streamIDExtensionID = 0
+				continue
+			}
+
+			var codec RTPCodecParameters
+			for _, c := range t.Receiver().codecs {
+				if c.PayloadType == payloadType {
+					codec = c
+					break
+				}
+			}
+			if codec.ClockRate == 0 {
+				return ErrCodecNotFound
 			}
 
 			track, err := t.Receiver().receiveForRid(rid, codec, ssrc)
