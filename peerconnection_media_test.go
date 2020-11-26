@@ -747,7 +747,7 @@ func TestAddTransceiverAddTrack_Reuse(t *testing.T) {
 
 	tr, err := pc.AddTransceiverFromKind(
 		RTPCodecTypeVideo,
-		RtpTransceiverInit{Direction: RTPTransceiverDirectionRecvonly},
+		RTPTransceiverInit{Direction: RTPTransceiverDirectionRecvonly},
 	)
 	assert.NoError(t, err)
 
@@ -785,7 +785,7 @@ func TestAddTransceiverAddTrack_NewRTPSender_Error(t *testing.T) {
 
 	_, err = pc.AddTransceiverFromKind(
 		RTPCodecTypeVideo,
-		RtpTransceiverInit{Direction: RTPTransceiverDirectionRecvonly},
+		RTPTransceiverInit{Direction: RTPTransceiverDirectionRecvonly},
 	)
 	assert.NoError(t, err)
 

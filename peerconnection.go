@@ -1605,6 +1605,10 @@ func (pc *PeerConnection) RemoveTrack(sender *RTPSender) error {
 		transceiver.setDirection(RTPTransceiverDirectionInactive)
 	}
 
+	if sender.Track() != nil {
+		_ = sender.Track().Unbind(TrackLocalContext{id: sender.id})
+	}
+
 	pc.onNegotiationNeeded()
 
 	return nil
