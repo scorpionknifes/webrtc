@@ -1,0 +1,47 @@
+pc ERROR: 2020/12/02 16:21:07 Incoming unhandled RTP ssrc(3703786985), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:21:10 Incoming unhandled RTP ssrc(464754457), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+ortc ERROR: 2020/12/02 16:21:10 Failed to accept data channel: failed to send ChannelOpen ACK: sending payload data in non-established state: state=Closed
+pc ERROR: 2020/12/02 16:22:22 Incoming unhandled RTP ssrc(4131148785), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:22:26 Incoming unhandled RTP ssrc(659676042), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+ortc ERROR: 2020/12/02 16:22:26 Failed to accept data channel: failed to send ChannelOpen ACK: sending payload data in non-established state: state=Closed
+pc ERROR: 2020/12/02 16:23:25 Incoming unhandled RTP ssrc(2838168238), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:23:36 Incoming unhandled RTP ssrc(3226952371), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:23:39 Incoming unhandled RTP ssrc(2460997599), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:23:42 Incoming unhandled RTP ssrc(1425283214), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:24:52 Incoming unhandled RTP ssrc(2616100366), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:24:55 Incoming unhandled RTP ssrc(3675060504), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:24:58 Incoming unhandled RTP ssrc(799653879), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+ortc ERROR: 2020/12/02 16:24:58 Failed to accept data channel: failed to send ChannelOpen ACK: sending payload data in non-established state: state=Closed
+pc ERROR: 2020/12/02 16:26:08 Incoming unhandled RTP ssrc(446195399), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:26:10 Incoming unhandled RTP ssrc(2852192492), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+pc ERROR: 2020/12/02 16:26:13 Incoming unhandled RTP ssrc(2535421909), OnTrack will not be fired. mid RTP Extensions required for Simulcast
+goos: windows
+goarch: amd64
+pkg: github.com/pion/webrtc/v3
+BenchmarkDataChannelSend2-12     	  363891	      3210 ns/op
+BenchmarkDataChannelSend2-12     	  335011	      3257 ns/op
+BenchmarkDataChannelSend2-12     	  430773	      2990 ns/op
+BenchmarkDataChannelSend2-12     	  447964	      3048 ns/op
+BenchmarkDataChannelSend2-12     	  315270	      3350 ns/op
+BenchmarkDataChannelSend4-12     	  471429	      2847 ns/op
+BenchmarkDataChannelSend4-12     	  462038	      2926 ns/op
+BenchmarkDataChannelSend4-12     	  501585	      2753 ns/op
+BenchmarkDataChannelSend4-12     	  384117	      3002 ns/op
+BenchmarkDataChannelSend4-12     	  336628	      3140 ns/op
+BenchmarkDataChannelSend8-12     	  388238	      2890 ns/op
+BenchmarkDataChannelSend8-12     	  463345	      2372 ns/op
+BenchmarkDataChannelSend8-12     	  501979	      2905 ns/op
+BenchmarkDataChannelSend8-12     	  321381	      3127 ns/op
+BenchmarkDataChannelSend8-12     	  319527	      3156 ns/op
+BenchmarkDataChannelSend16-12    	  510862	      2641 ns/op
+BenchmarkDataChannelSend16-12    	  519040	      2282 ns/op
+BenchmarkDataChannelSend16-12    	  492054	      2782 ns/op
+BenchmarkDataChannelSend16-12    	  412304	      2741 ns/op
+BenchmarkDataChannelSend16-12    	  518533	      2684 ns/op
+BenchmarkDataChannelSend32-12    	       1	1268998500 ns/op
+BenchmarkDataChannelSend32-12    	       1	1269509300 ns/op
+BenchmarkDataChannelSend32-12    	      15	  71233753 ns/op
+BenchmarkDataChannelSend32-12    	       3	 356333433 ns/op
+BenchmarkDataChannelSend32-12    	       1	1068999500 ns/op
+PASS
+ok  	github.com/pion/webrtc/v3	456.997s
