@@ -14,6 +14,8 @@ import (
 // expectedLabel represents the label of the data channel we are trying to test.
 // Some other channels may have been created during initialization (in the Wasm
 // bindings this is a requirement).
+// Some other channels may have been created during initialization (in the Wasm
+// bindings this is a requirement).
 const expectedLabel = "data"
 
 func closePairNow(t testing.TB, pc1, pc2 io.Closer) {

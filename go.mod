@@ -19,4 +19,5 @@ require (
 	github.com/sclevine/agouti v3.0.0+incompatible
 	github.com/stretchr/testify v1.6.1
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
+	golang.org/x/perf v0.0.0-20200918155509-d949658356f9 // indirect
 )

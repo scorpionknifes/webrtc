@@ -15,6 +15,9 @@ import (
 
 // If a remote doesn't support a Codec used by a `TrackLocalStatic`
 // an error should be returned to the user
+// an error should be returned to the user
+// an error should be returned to the user
+// an error should be returned to the user
 func Test_TrackLocalStatic_NoCodecIntersection(t *testing.T) {
 	lim := test.TimeOut(time.Second * 30)
 	defer lim.Stop()
@@ -192,4 +195,26 @@ func Test_TrackLocalStatic_Mutate_Input(t *testing.T) {
 
 	assert.NoError(t, pcOffer.Close())
 	assert.NoError(t, pcAnswer.Close())
+}
+
+func Benchmark_TrackLocalStaticRTP_SendOnly_WriteRTP(b *testing.B) {
+	offer, answer, err := newPair()
+	assert.NoError(b, err)
+
+	track, err := NewTrackLocalStaticRTP(RTPCodecCapability{MimeType: "video/vp8"}, "video", "pion")
+	assert.NoError(b, err)
+
+	_, err = offer.AddTrack(track)
+	assert.NoError(b, err)
+
+	assert.NoError(b, signalPair(offer, answer))
+	ctx := context.Background()
+
+	buffer := make([]byte, 1000)
+	for i := 0; i <= b.N; i++ {
+		assert.NoError(b, track.WriteRTP(ctx, &rtp.Packet{Payload: buffer}))
+	}
+
+	assert.NoError(b, offer.Close())
+	assert.NoError(b, answer.Close())
 }
