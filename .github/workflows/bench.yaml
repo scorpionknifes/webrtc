@@ -12,12 +12,12 @@ jobs:
         uses: actions/setup-go@v2
       - name: Benchmark
         run: |
-          go test -run=XXX -bench=. -count 5 | tee -a bench.txt
+          go test -run=XXX -bench=. -count 5 | tee -a bench-incoming.txt
       - name: Upload Benchmark
         uses: actions/upload-artifact@v2
         with:
           name: bench-incoming
-          path: bench.txt
+          path: bench-incoming.txt
   current:
     runs-on: ubuntu-latest
     steps:
@@ -29,12 +29,12 @@ jobs:
         uses: actions/setup-go@v2
       - name: Benchmark
         run: |
-          go test -run=XXX -bench=. -count 5 | tee -a bench.txt
+          go test -run=XXX -bench=. -count 5 | tee -a bench-current.txt
       - name: Upload Benchmark
         uses: actions/upload-artifact@v2
         with:
           name: bench-current
-          path: bench.txt
+          path: bench-current.txt
   benchstat:
     needs: [incoming, current]
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
       - name: Print
         run: ls
       - name: Benchstat Results
-        run: benchstat bench-current/bench.txt bench-incoming/bench.txt | tee -a benchstat.txt
+        run: benchstat bench-current.txt bench-incoming.txt | tee -a benchstat.txt
       - name: Upload benchstat results
         uses: actions/upload-artifact@v2
         with:
